@@ -7,6 +7,7 @@ import {
 	badRequestHandler,
 	genericErrorHandler,
 } from './errorHandlers.js';
+import products from './services/products/index.js'
 
 const server = express();
 const port = 3001;
@@ -14,6 +15,7 @@ const port = 3001;
 /////////////middlewares
 server.use(cors());
 server.use(express.json());
+server.use('/products',products)
 ////Routes comes here
 
 // ************************** ERROR HANDLERS ***************************
