@@ -1,6 +1,8 @@
 import express from 'express';
 import reviewModel from './schema.js';
 import createHttpError from 'http-errors';
+import productsModel from '../products/schema.js';
+import mongoose from 'mongoose';
 // import q2m from "query-to-mongo"
 
 const reviewsRouter = express.Router();
@@ -18,9 +20,11 @@ reviewsRouter.get('/', async (req, res, next) => {
 
 reviewsRouter.post('/', async (req, res, next) => {
 	try {
-		const newReview = new reviewModel(req.body);
-		const allReview = await newReview.save();
-		res.status(201).send(allReview);
+		const newReview = await new reviewModel(req.body).save();
+		const product = await productsModel.findById(req.body.product);
+		console.log(product);
+		const { _id } = await newReview.save();
+		res.status(201).send(_id);
 	} catch (error) {
 		next(error);
 	}
@@ -29,9 +33,8 @@ reviewsRouter.post('/', async (req, res, next) => {
 reviewsRouter.get('/:reviewId', async (req, res, next) => {
 	try {
 		const reviewId = req.params.reviewId;
-		const review = await reviewModel
-			.findById(reviewId)
-			.populate({ path: 'product', select: 'name description price' }); // look what marco write
+		const review = await reviewModel.findById(reviewId);
+		// .populate({ path: 'product', select: 'name description price' }); // look what marco write
 		if (review) {
 			res.send(review);
 		} else {

@@ -37,7 +37,7 @@ products.post('/', async (req, res, next) => {
 products.get('/:productId', async (req, res, next) => {
 	try {
 		const productId = req.params.productId;
-		const product = await productModel.findById(productId);
+		const product = await productModel.findById(productId).populate('reviews');
 		if (product) {
 			res.send(product);
 		} else {
