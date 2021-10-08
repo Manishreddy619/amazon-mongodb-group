@@ -7,8 +7,15 @@ const products=express.Router()
 
 products.get('/',async(req,res,next)=>{
     try {
-        const products=await productModel.find()
-        res.send(products)
+        const mQ=q2m(req.query)
+        const totalProducts=await productModel.countDocuments(mQ.criteria)
+        const products=await productModel
+            .find()
+            .sort(mQ.options.sort)
+            .skip(mQ.options.skip||5)
+            .limit(mQ.options.limit||5)
+            //.populate({path:'reviews'})
+        res.send({links:mQ.links('/products',totalProducts),totalProducts,pageTotal:Math.ceil(totalProducts/mQ.options.limit),products})
     } catch (error) {
         next(error)
     }
