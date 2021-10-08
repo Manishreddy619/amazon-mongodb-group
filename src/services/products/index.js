@@ -22,5 +22,19 @@ products.post('/',async(req,res,next)=>{
         next(error)
     }
 })
+products.get('/:productId',async(req,res,next)=>{
+    try {
+        const productId=req.params.productId
+        const products=await productModel.findById(productId)
+        if(products){
+            res.send(products)
+        }else{
+            next(createHttpError(404,`PRODUCT ID${productId} NOT FOUND`))
+        }
+        res.send(products)
+    } catch (error) {
+        next(error)
+    }
+})
 
 export default products
