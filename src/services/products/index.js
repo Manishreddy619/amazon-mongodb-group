@@ -25,16 +25,29 @@ products.post('/',async(req,res,next)=>{
 products.get('/:productId',async(req,res,next)=>{
     try {
         const productId=req.params.productId
-        const products=await productModel.findById(productId)
-        if(products){
-            res.send(products)
+        const product=await productModel.findById(productId)
+        if(product){
+            res.send(product)
         }else{
             next(createHttpError(404,`PRODUCT ID${productId} NOT FOUND`))
         }
-        res.send(products)
     } catch (error) {
         next(error)
     }
 })
+products.put('/:productId',async(req,res,next)=>{
+    try {
+        const productId=req.params.productId
+        const modifiedProduct=await productModel.findByIdAndUpdate(productId,req.body,{new:true})
+        if(modifiedProduct){
+            res.send(modifiedProduct)
+        }else{
+            next(createHttpError(404,`PRODUCT ID${productId} NOT FOUND`))
+        }
+    } catch (error) {
+        next(error)
+    }
+})
+
 
 export default products
