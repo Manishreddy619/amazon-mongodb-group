@@ -48,6 +48,19 @@ products.put('/:productId',async(req,res,next)=>{
         next(error)
     }
 })
+products.delete('/:productId',async(req,res,next)=>{
+    try {
+        const productId=req.params.productId
+        const deletedProduct=await productModel.findByIdAndDelete(productId)
+        if(deletedProduct){
+            res.send(`PRODUCT WITH ID${productId} IS GONE`)
+        }else{
+            next(createHttpError(404,`PRODUCT ID${productId} NOT FOUND`))
+        }
+    } catch (error) {
+        next(error)
+    }
+})
 
 
 export default products
