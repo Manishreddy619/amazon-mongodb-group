@@ -34,7 +34,13 @@ reviewsRouter.post('/', async (req, res, next) => {
 				);
 				console.log(product);
 				res.status(201).send(_id);
+			} else {
+				next(createHttpError(500, `something went wrong`));
 			}
+		} else {
+			next(
+				createHttpError(404, `product with id ${req.body.product} not found!`),
+			);
 		}
 	} catch (error) {
 		next(error);
