@@ -23,8 +23,19 @@ reviewsRouter.post('/', async (req, res, next) => {
 		const newReview = await new reviewModel(req.body).save();
 		const product = await productsModel.findById(req.body.product);
 		console.log(product);
-		const { _id } = await newReview.save();
-		res.status(201).send(_id);
+		console.log(req.body.product);
+		if (product) {
+			const { _id } = await newReview.save();
+			if (_id) {
+				const product = await productsModel.findByIdAndUpdate(
+					req.body.product,
+					{ $push: { reviews: _id } },
+					{ new: true },
+				);
+				console.log(product);
+				res.status(201).send(_id);
+			}
+		}
 	} catch (error) {
 		next(error);
 	}

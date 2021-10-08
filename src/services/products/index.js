@@ -13,8 +13,8 @@ products.get('/', async (req, res, next) => {
 			.find()
 			.sort(mQ.options.sort)
 			.skip(mQ.options.skip || 5)
-			.limit(mQ.options.limit || 5);
-		//.populate({path:'reviews'})
+			.limit(mQ.options.limit || 5)
+			.populate({ path: 'reviews' });
 		res.send({
 			links: mQ.links('/products', totalProducts),
 			totalProducts,
