@@ -29,7 +29,9 @@ reviewsRouter.post('/', async (req, res, next) => {
 reviewsRouter.get('/:reviewId', async (req, res, next) => {
 	try {
 		const reviewId = req.params.reviewId;
-		const review = await reviewModel.findById(reviewId).populate('product'); // look what marco write
+		const review = await reviewModel
+			.findById(reviewId)
+			.populate({ path: 'product', select: 'name description price' }); // look what marco write
 		if (review) {
 			res.send(review);
 		} else {
